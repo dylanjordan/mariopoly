@@ -6,9 +6,14 @@ using UnityEngine;
 public class Board : MonoBehaviour
 {
     [SerializeField] private Transform _initialTransform;
+    [SerializeField] private List<WarpPipe> _warpPipe;
 
     Vector2[] _tilePositions = new Vector2[72];
 
+    public List<WarpPipe> GetWarpPipes()
+    {
+        return _warpPipe;
+    }
     public Vector2[] GetTilePositions()
     {
         return _tilePositions;
@@ -54,7 +59,7 @@ public class Board : MonoBehaviour
                 }
                 if ((i + 1) % 10 == 0)
                 {
-                    
+
                     horiMove = !horiMove;
                     Vert = true;
                     Hori = false;
