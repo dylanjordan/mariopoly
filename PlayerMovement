@@ -90,6 +90,7 @@ public class PlayerMovement : MonoBehaviour
             {
                 UpdatePosition();
             }
+
             for (int i = 0; i < _board.GetWarpPipes().Count; i++)
             {
                 if (_tileMovementAmount == 0 && _players[_currentPlayer].GetCurrentTile() == _board.GetWarpPipes()[i].GetPosOne())
@@ -97,22 +98,21 @@ public class PlayerMovement : MonoBehaviour
                     _tileMovementAmount = 1;
                     Teleport(i);
                 }
-
-                if (_tileMovementAmount == 0 && !_isMoving)
+            }
+            if (_tileMovementAmount == 0 && !_isMoving)
+            {
+                _text.text = "Press Spacebar to roll the dice!";
+                if (_turnStarted)
                 {
-                    _text.text = "Press Spacebar to roll the dice!";
-                    if (_turnStarted)
-                    {
-                        _turnStarted = false;
+                    _turnStarted = false;
 
-                        if (_currentPlayer == 0)
-                        {
-                            _currentPlayer = 1;
-                        }
-                        else
-                        {
-                            _currentPlayer = 0;
-                        }
+                    if (_currentPlayer == 0)
+                    {
+                        _currentPlayer = 1;
+                    }
+                    else
+                    {
+                        _currentPlayer = 0;
                     }
                 }
             }
@@ -145,7 +145,8 @@ public class PlayerMovement : MonoBehaviour
             _players[_currentPlayer].SetCurrentTile(_players[_currentPlayer].GetCurrentTile() + 1);
         }
 
-        void Teleport(int slot) {
+        void Teleport(int slot)
+        {
             _players[_currentPlayer].SetCurrentTile(_board.GetWarpPipes()[slot].GetPosTwo() - 1);
         }
     }
