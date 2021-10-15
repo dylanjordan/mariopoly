@@ -28,7 +28,7 @@ public class PlayerMovement : MonoBehaviour
 
     //current turn information
 
-    int _currentplayer = 0;
+    public int _currentPlayer = 0;
     int _tileMovementAmount;
 
     //Our die
@@ -51,7 +51,7 @@ public class PlayerMovement : MonoBehaviour
         if ((_players[0].GetCurrentTile() == 100 || _players[1].GetCurrentTile() == 100) && !_isMoving)
         {
             _gameIsOver = true;
-            _text.text = $"Game Over! Player {_currentplayer + 1} has won! Press space to place again!";
+            _text.text = $"Game Over! Player {_currentPlayer + 1} has won! Press space to place again!";
         }
     }
 
@@ -63,9 +63,9 @@ public class PlayerMovement : MonoBehaviour
 
         if (!_gameIsOver)
         {
-            _currentPos = _players[_currentplayer].GetPosition();
-              
-            if (_currentplayer == 0)
+            _currentPos = _players[_currentPlayer].GetPosition();
+
+            if (_currentPlayer == 0)
             {
                 _text.color = Color.magenta;
             }
@@ -90,52 +90,64 @@ public class PlayerMovement : MonoBehaviour
             {
                 UpdatePosition();
             }
-
-            if (_tileMovementAmount == 0 && !_isMoving)
+            for (int i = 0; i < _board.GetWarpPipes().Count; i++)
             {
-                _text.text = "Press Spacebar to roll the dice!";
-                if (_turnStarted)
+                if (_tileMovementAmount == 0 && _players[_currentPlayer].GetCurrentTile() == _board.GetWarpPipes()[i].GetPosOne())
                 {
-                    _turnStarted = false;
+                    _tileMovementAmount = 1;
+                    Teleport(i);
+                }
 
-                    if (_currentplayer == 0)
+                if (_tileMovementAmount == 0 && !_isMoving)
+                {
+                    _text.text = "Press Spacebar to roll the dice!";
+                    if (_turnStarted)
                     {
-                        _currentplayer = 1;
-                    }
-                    else
-                    {
-                        _currentplayer = 0;
+                        _turnStarted = false;
+
+                        if (_currentPlayer == 0)
+                        {
+                            _currentPlayer = 1;
+                        }
+                        else
+                        {
+                            _currentPlayer = 0;
+                        }
                     }
                 }
             }
+
         }
 
-    }
-
-    void UpdatePosition()
-    {
-        _deltaT += Time.deltaTime / _totalTime;
-
-        if (_deltaT <0f)
+        void UpdatePosition()
         {
-            _deltaT = 0f;
+            _deltaT += Time.deltaTime / _totalTime;
+
+            if (_deltaT < 0f)
+            {
+                _deltaT = 0f;
+            }
+
+            if (_deltaT >= 1f || _nextPos == _currentPos)
+            {
+                _isMoving = false;
+                _tileMovementAmount--;
+                _deltaT = 0f;
+            }
+            _players[_currentPlayer].SetPosition(Vector2.Lerp(_currentPos, _nextPos, _deltaT));
         }
 
-        if (_deltaT >= 1f || _nextPos == _currentPos)
+        void MoveOneTile()
         {
-            _isMoving = false;
-            _tileMovementAmount--;
-            _deltaT = 0f;
+            _nextPos = _board.GetTilePositions()[_players[_currentPlayer].GetCurrentTile()];
+            _totalTime = (_nextPos - _currentPos / _speed).magnitude;
+            _isMoving = true;
+            _players[_currentPlayer].SetCurrentTile(_players[_currentPlayer].GetCurrentTile() + 1);
         }
-        _players[_currentplayer].SetPosition(Vector2.Lerp(_currentPos, _nextPos, _deltaT));
-    }
 
-    void MoveOneTile()
-    {
-        _nextPos = _board.GetTilePositions()[_players[_currentplayer].GetCurrentTile()];
-        _totalTime = (_nextPos - _currentPos / _speed).magnitude;
-        _isMoving = true;
-        _players[_currentplayer].SetCurrentTile(_players[_currentplayer].GetCurrentTile() + 1);
+        void Teleport(int slot)
+        {
+            _players[_currentPlayer].SetCurrentTile{ _board.GetWarpPipes()[slot].GetPosTwo() - 1};
+        }
     }
-
 }
