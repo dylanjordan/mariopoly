@@ -145,9 +145,8 @@ public class PlayerMovement : MonoBehaviour
             _players[_currentPlayer].SetCurrentTile(_players[_currentPlayer].GetCurrentTile() + 1);
         }
 
-        void Teleport(int slot)
-        {
-            _players[_currentPlayer].SetCurrentTile{ _board.GetWarpPipes()[slot].GetPosTwo() - 1};
+        void Teleport(int slot) {
+            _players[_currentPlayer].SetCurrentTile(_board.GetWarpPipes()[slot].GetPosTwo() - 1);
         }
     }
 }
