@@ -7,7 +7,7 @@ public class Board : MonoBehaviour
 {
     [SerializeField] private Transform _initialTransform;
 
-    Vector2[] _tilePositions = new Vector2[100];
+    Vector2[] _tilePositions = new Vector2[72];
 
     public Vector2[] GetTilePositions()
     {
@@ -16,27 +16,49 @@ public class Board : MonoBehaviour
 
     public void InitTilePositions()
     {
-        bool reverse = false;
+        bool Vert = true;
+        bool vertMove = false;
+        bool Hori = false;
+        bool horiMove = false;
 
         _tilePositions[0] = new Vector2(_initialTransform.position.x, _initialTransform.position.y);
 
-        for (int i = 1; i <100; i++)
+        for (int i = 1; i < 72; i++)
         {
-            if (i % 10 == 0)
+            if (Vert)
             {
-                _tilePositions[i] = _tilePositions[i - 1] + new Vector2(0f, 1f);
+                if (!vertMove)
+                {
+                    _tilePositions[i] = _tilePositions[i - 1] + Vector2.up;
+                }
+                if (vertMove)
+                {
+                    _tilePositions[i] = _tilePositions[i - 1] + Vector2.down;
+                }
+                if ((i + 1) % 10 == 0)
+                {
+                    vertMove = !vertMove;
+                    Hori = true;
+                    Vert = false;
+                }
             }
-            else if (!reverse)
+            else if (Hori)
             {
-                _tilePositions[i] = _tilePositions[i - 1] + new Vector2(1f, 0f);
-            }
-            else if (reverse)
-            {
-                _tilePositions[i] = _tilePositions[i - 1] + new Vector2(-1f, 0f);
-            }
-            if((i + 1) % 10 == 0)
-            {
-                reverse = !reverse;
+                if (!horiMove)
+                {
+                    _tilePositions[i] = _tilePositions[i - 1] + Vector2.right;
+                }
+                if (horiMove)
+                {
+                    _tilePositions[i] = _tilePositions[i - 1] + Vector2.left;
+                }
+                if ((i + 1) % 10 == 0)
+                {
+                    
+                    horiMove = !horiMove;
+                    Vert = true;
+                    Hori = false;
+                }
             }
         }
     }
