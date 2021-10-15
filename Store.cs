@@ -112,7 +112,7 @@ public class Store : MonoBehaviour
         _text.text = $"Welcome to the {_storeName} store! \n" +
             $"At this store, we sell the following items: {_itemType1}, and {_itemType2}! ";
     }
-    public void PrintGoodbye()
+    private void PrintGoodbye()
     {
         _shopping = false;
 
