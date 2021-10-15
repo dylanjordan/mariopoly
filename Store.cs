@@ -16,7 +16,7 @@ public class Store : MonoBehaviour
     List<string> _storeItemsList = new List<string>();
     List<string> _playerItemsList = new List<string>();
 
-    static string input;
+    static int input;
 
     public Store(string storeName, string soldItem_1, string soldItem_2)
     {
@@ -29,8 +29,6 @@ public class Store : MonoBehaviour
 
     public void FillStore()
     {
-        _text.color = Color.cyan;
-
         _storeItemsList.Add("Roll Again Card");
         _storeItemsList.Add("Get Out Of Jail Free Card");
     }
@@ -61,25 +59,34 @@ public class Store : MonoBehaviour
         _buying = true;
         while (_buying)
         {
-            if (Input.GetKeyDown(KeyCode.Alpha1) || Input.GetKeyDown(KeyCode.Alpha2))
+            if (Input.GetKeyDown(KeyCode.Alpha1))
             {
-                int choice;
-                if (int.TryParse(input, out choice))
-                {
-                    _playerItemsList.Add(_storeItemsList[choice - 1]);
-                    _storeItemsList.RemoveAt(choice - 1);
+                int choice = 1;
 
-                    _text.color = Color.yellow;
-                    _text.text = $"You have purchased {_playerItemsList[_playerItemsList.Count - 1]}!";
+                _playerItemsList.Add(_storeItemsList[choice - 1]);
+                _storeItemsList.RemoveAt(choice - 1);
 
-                    PrintItems();
+                _text.color = Color.yellow;
+                _text.text = $"You have purchased {_playerItemsList[_playerItemsList.Count - 1]}!";
 
+                PrintItems();
+            }
+            else if (Input.GetKeyDown(KeyCode.Alpha2))
+            {
+                int choice = 2;
 
-                }
-            } else if (Input.GetKeyDown(KeyCode.Backspace))
+                _playerItemsList.Add(_storeItemsList[choice - 1]);
+                _storeItemsList.RemoveAt(choice - 1);
+
+                _text.color = Color.yellow;
+                _text.text = $"You have purchased {_playerItemsList[_playerItemsList.Count - 1]}!";
+
+                PrintItems();
+            }
+            else if (Input.GetKeyDown(KeyCode.Backspace))
             {
                 PrintGoodbye();
-            } 
+            }
             else
             {
                 PrintError();
@@ -91,7 +98,7 @@ public class Store : MonoBehaviour
         _text.color = Color.green;
         _text.text = "Please Input the number next to the item you would like to purchase.\n";
 
-        for(int i = 0; i < _storeItemsList.Count; i++)
+        for (int i = 0; i < _storeItemsList.Count; i++)
         {
             _text.text = $"{i + 1}: {_storeItemsList[i]}\n";
         }
@@ -118,3 +125,4 @@ public class Store : MonoBehaviour
         _text.text = "Please enter a valid command!!!";
     }
 }
+
