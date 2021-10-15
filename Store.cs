@@ -5,6 +5,7 @@ using UnityEngine.UI;
 public class Store : MonoBehaviour
 {
     [SerializeField] private Text _text;
+    [SerializeField] private PlayerMovement _playerMovement = new PlayerMovement();
 
     private string _storeName;
     private string _itemType1;
@@ -116,7 +117,7 @@ public class Store : MonoBehaviour
         _shopping = false;
 
         _text.color = Color.green;
-        _text.text = $"Thank you player {_currentplayer} for visting the store today!\n" +
+        _text.text = $"Thank you player {_playerMovement._currentPlayer} for visting the store today!\n" +
             $"I hope we made your day better!";
     }
     private void PrintError()
